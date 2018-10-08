@@ -1,8 +1,15 @@
 class Api::CoinsController < ApplicationController
-  before_action :set_coin, only: [:show, :update, :destroy]
+  before_action :set_coin, only: [:update, :destroy]
   BASE_URL = 'https://api.coinmarketcap.com/v2/'
 
   def index
+    listings = HTTParty.get("#{BASE_URL}ticker")['data'].values
+    user_coins = current_user.coins
+    user_coins.each do |coin| 
+      res_coin = listings.find { |c| c['id'] === coin.cmc_id }
+      coin.update(price: res_coin['quotes']['USD']['price'])
+    end
+
     render json: current_user.coins
   end
 
@@ -23,7 +30,8 @@ class Api::CoinsController < ApplicationController
   end
 
   def show
-    render json: @coin
+    res = HTTParty.get("#{BASE_URL}ticker/#{params}[:id])")
+    render json: res['data']
   end
 
   def update

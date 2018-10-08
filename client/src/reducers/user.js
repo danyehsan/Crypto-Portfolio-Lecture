@@ -1,3 +1,4 @@
+
 import React from 'react';
 import axios from 'axios';
 import { setFlash } from './flash';
@@ -37,7 +38,7 @@ export const handleLogout = history => {
         dispatch(setFlash('Logged out successfully!', 'green'));
         history.push('/login');
       })
-      .catch(res => {
+      .catch( res => {
         let errors = res.response.data.errors ? res.response.data.errors : ['Something went wrong']
         if (!Array.isArray(errors))
           errors = [errors]
@@ -57,7 +58,7 @@ export const handleLogin = (user, history) => {
         dispatch(login(user));
         history.push('/');
       })
-      .catch(res => {
+      .catch( res => {
         let errors = res.response.data.errors ? res.response.data.errors : ['Something went wrong']
         if (!Array.isArray(errors))
           errors = [errors]
@@ -72,11 +73,10 @@ export const handleLogin = (user, history) => {
 export default (state = {}, action) => {
   switch (action.type) {
     case LOGIN:
-    return action.user;
+      return action.user;
     case LOGOUT:
-    return {};
+      return {};
     default:
-    return state;
+      return state;
   }
 };
-
